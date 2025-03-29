@@ -1,26 +1,89 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
+import { Todo } from './entities/todo.entity';
+import { Todo as PrismaTodo } from '@prisma/client';
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class TodosService {
-  create(createTodoDto: CreateTodoDto) {
-    return 'This action adds a new todo';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async createTodo(createTodoDto: CreateTodoDto): Promise<Todo> {
+    const createdTodo: PrismaTodo = await this.prisma.todo.create({
+      data: {
+        title: createTodoDto.title,
+        description: createTodoDto.description,
+        userId: createTodoDto.userId, // later user id must be provided from the authentication middleware
+      },
+    });
+    return new Todo(
+      createdTodo.id,
+      createdTodo.userId,
+      createdTodo.title,
+      createdTodo.isCompleted,
+      createdTodo.description,
+    );
   }
 
-  findAll() {
-    return `This action returns all todos`;
+  async updateTodo(id: string, updateTodoDto: UpdateTodoDto): Promise<Todo> {
+    const updatedTodo: PrismaTodo = await this.prisma.todo.update({
+      where: { id },
+      data: {
+        title: updateTodoDto.title,
+        description: updateTodoDto.description,
+        isCompleted: updateTodoDto.isCompleted || false,
+      },
+    });
+    return new Todo(
+      updatedTodo.id,
+      updatedTodo.userId,
+      updatedTodo.title,
+      updatedTodo.isCompleted,
+      updatedTodo.description,
+    );
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} todo`;
+  async deleteTodo(id: string): Promise<Todo> {
+    const deletedTodo: PrismaTodo = await this.prisma.todo.delete({
+      where: { id },
+    });
+    return new Todo(
+      deletedTodo.id,
+      deletedTodo.userId,
+      deletedTodo.title,
+      deletedTodo.isCompleted,
+      deletedTodo.description,
+    );
   }
 
-  update(id: number, updateTodoDto: UpdateTodoDto) {
-    return `This action updates a #${id} todo`;
+  async getTodos(): Promise<Todo[]> {
+    const todos: PrismaTodo[] = await this.prisma.todo.findMany();
+    return todos.map(
+      (todo) =>
+        new Todo(
+          todo.id,
+          todo.userId,
+          todo.title,
+          todo.isCompleted,
+          todo.description,
+        ),
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} todo`;
+  async getTodo(id: string): Promise<Todo> {
+    const todo: PrismaTodo | null = await this.prisma.todo.findUnique({
+      where: { id },
+    });
+    if (!todo) {
+      throw new NotFoundException(`Todo with ID ${id} not found`);
+    }
+    return new Todo(
+      todo.id,
+      todo.userId,
+      todo.title,
+      todo.isCompleted,
+      todo.description,
+    );
   }
 }

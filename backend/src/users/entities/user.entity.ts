@@ -4,7 +4,7 @@ export class User {
   firstName: string;
   lastName: string;
   email: string;
-  passwordHash: string;
+  passwordHash?: string;
   createdAt: Date;
   updatedAt: Date;
 
@@ -23,7 +23,6 @@ export class User {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
-    this.passwordHash = passwordHash;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
