@@ -1,1 +1,53 @@
 @import "tailwindcss";
+
+@theme {
+  /* define primary color */
+  --color-primary-50: oklch(98.78% 0.02 237.32);
+  --color-primary-100: oklch(96.46% 0.043 237.35);
+  --color-primary-200: oklch(93.14% 0.077 237.04);
+  --color-primary-300: oklch(89.05% 0.12 234.77);
+  --color-primary-400: oklch(83.64% 0.167 232.19);
+  --color-primary-500: oklch(75.68% 0.185 241.32);
+  --color-primary-600: oklch(70.2% 0.199 250.68);
+  --color-primary-700: oklch(64.8% 0.199 260.77);
+  --color-primary-800: oklch(51.81% 0.175 264.92);
+  --color-primary-900: oklch(44.65% 0.149 264.78);
+  --color-primary-950: oklch(31.59% 0.109 266.1);
+
+  /* light theme */
+  --color-surface: var(--color-white);
+  --color-surface-alt: var(--color-neutral-50);
+  --color-on-surface: var(--color-neutral-600);
+  --color-on-surface-strong: var(--color-neutral-900);
+  --color-primary: var(--color-primary-500);
+  --color-on-primary: var(--color-neutral-100);
+  --color-secondary: var(--color-neutral-800);
+  --color-on-secondary: var(--color-white);
+  --color-outline: var(--color-neutral-300);
+  --color-outline-strong: var(--color-neutral-800);
+
+  /* dark theme */
+  --color-surface-dark: var(--color-neutral-950);
+  --color-surface-dark-alt: var(--color-neutral-900);
+  --color-on-surface-dark: var(--color-neutral-300);
+  --color-on-surface-dark-strong: var(--color-white);
+  --color-primary-dark: var(--color-primary-500);
+  --color-on-primary-dark: var(--color-white);
+  --color-secondary-dark: var(--color-neutral-300);
+  --color-on-secondary-dark: var(--color-black);
+  --color-outline-dark: var(--color-neutral-700);
+  --color-outline-dark-strong: var(--color-neutral-300);
+
+  /* shared colors */
+  --color-info: var(--color-sky-500);
+  --color-on-info: var(--color-white);
+  --color-success: var(--color-green-500);
+  --color-on-success: var(--color-white);
+  --color-warning: var(--color-amber-500);
+  --color-on-warning: var(--color-white);
+  --color-danger: var(--color-red-500);
+  --color-on-danger: var(--color-white);
+
+  /* border radius */
+  --radius-radius: var(--radius-sm);
+}
