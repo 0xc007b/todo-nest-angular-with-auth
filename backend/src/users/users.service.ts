@@ -43,6 +43,25 @@ export class UsersService {
     );
   }
 
+  async getUserByUsernameOrEmail(usernameOrEmail: string): Promise<User> {
+    const user: PrismaUser | null = await this.prisma.user.findFirst({
+      where: {
+        OR: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return new User(
+      user.id,
+      user.username,
+      user.firstname,
+      user.lastname,
+      user.email,
+      user.passwordHash,
+    );
+  }
+
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     // hash the password
     const saltRounds = 10;
@@ -102,5 +121,12 @@ export class UsersService {
       deletedUser.email,
       deletedUser.passwordHash,
     );
+  }
+
+  async comparePassword(
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return await bcrypt.compare(password, hashedPassword);
   }
 }

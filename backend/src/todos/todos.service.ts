@@ -4,17 +4,21 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from './entities/todo.entity';
 import { Todo as PrismaTodo } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
+import { TokenUserDto } from 'src/auth/dto/token-user.dto';
 
 @Injectable()
 export class TodosService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createTodo(createTodoDto: CreateTodoDto): Promise<Todo> {
+  async createTodo(
+    createTodoDto: CreateTodoDto,
+    user: TokenUserDto,
+  ): Promise<Todo> {
     const createdTodo: PrismaTodo = await this.prisma.todo.create({
       data: {
         title: createTodoDto.title,
         description: createTodoDto.description,
-        userId: createTodoDto.userId, // later user id must be provided from the authentication middleware
+        userId: user.sub,
       },
     });
     return new Todo(
