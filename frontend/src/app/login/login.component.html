@@ -1,0 +1,61 @@
+<main class="h-screen w-screen bg-gray-100">
+  <div class="h-full w-full flex flex-col">
+    <header
+      class="bg-blue-900 text-white p-4 flex items-center border-b-4 border-blue-500"
+    >
+      <div class="container mx-auto">
+        <div class="flex items-center">
+          <div>
+            <h1 class="text-2xl font-bold">Login</h1>
+            <p class="text-sm">Welcome back</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container mx-auto py-8 px-4">
+      <div class="bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
+        <h2 class="text-xl font-semibold text-gray-700 pb-2">Sign In</h2>
+        <p class="text-gray-600 mb-6">
+          Please enter your credentials to access your account.
+        </p>
+
+        <form class="grid grid-cols-1 gap-3">
+          <div>
+            <app-input
+              type="text"
+              id="username"
+              name="username"
+              [required]="true"
+              label="Username or Email"
+              placeholder="Enter your username or email"
+              [isFullWidth]="true"
+            />
+          </div>
+          <div>
+            <app-input
+              type="password"
+              id="password"
+              name="password"
+              [required]="true"
+              label="Password"
+              placeholder="Enter your password"
+              [isFullWidth]="true"
+            />
+          </div>
+
+          <div class="mt-4">
+            <app-button class="mt-4" type="submit" [isFullWidth]="true">
+              Login
+            </app-button>
+
+            <div class="mt-4 text-center text-sm text-gray-600">
+              Don't have an account?
+              <a href="/register" class="text-blue-700 font-medium">Register</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
