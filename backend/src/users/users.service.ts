@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -63,6 +67,24 @@ export class UsersService {
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
+    // Check if user with email already exists
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: createUserDto.email },
+    });
+
+    if (existingUser) {
+      throw new ConflictException('User with this email already exists');
+    }
+
+    // Check if username is taken
+    const existingUsername = await this.prisma.user.findUnique({
+      where: { username: createUserDto.username },
+    });
+
+    if (existingUsername) {
+      throw new ConflictException('Username is already taken');
+    }
+
     // hash the password
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(
@@ -70,23 +92,32 @@ export class UsersService {
       saltRounds,
     );
 
-    const createdUser: PrismaUser = await this.prisma.user.create({
-      data: {
-        username: createUserDto.username,
-        firstname: createUserDto.firstName,
-        lastname: createUserDto.lastName,
-        email: createUserDto.email,
-        passwordHash: hashedPassword,
-      },
-    });
-    return new User(
-      createdUser.id,
-      createdUser.username,
-      createdUser.firstname,
-      createdUser.lastname,
-      createdUser.email,
-      createdUser.passwordHash,
-    );
+    try {
+      const createdUser: PrismaUser = await this.prisma.user.create({
+        data: {
+          username: createUserDto.username,
+          firstname: createUserDto.firstName,
+          lastname: createUserDto.lastName,
+          email: createUserDto.email,
+          passwordHash: hashedPassword,
+        },
+      });
+      return new User(
+        createdUser.id,
+        createdUser.username,
+        createdUser.firstname,
+        createdUser.lastname,
+        createdUser.email,
+        createdUser.passwordHash,
+      );
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ConflictException(
+          `User with this ${error.meta.target.join(', ')} already exists`,
+        );
+      }
+      throw error;
+    }
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {

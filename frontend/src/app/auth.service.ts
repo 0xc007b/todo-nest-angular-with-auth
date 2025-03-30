@@ -28,12 +28,20 @@ export class AuthService {
     // TODO: Implement logout logic
   }
 
-  async register(
-    email: string,
-    username: string,
-    password: string,
-  ): Promise<void> {
-    // TODO: Implement registration logic
+  async register(userData: any): Promise<void> {
+    const response = await fetch(environment.apiUrl + "/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const body = await response.json();
+
+    if (!response.ok) {
+      throw new Error(body.message);
+    }
   }
 
   async getCurrentUser(): Promise<any> {
