@@ -31,7 +31,9 @@
         alt="User"
         class="h-8 w-8 rounded-full border-2 border-white"
       />
-      <span class="font-medium">John Doe</span>
+      <span class="font-medium"
+        >{{ currentUser?.firstName }} {{ currentUser?.lastName }}</span
+      >
     </div>
   </header>
   <section
@@ -72,7 +74,7 @@
               id="todoCheckbox"
               type="checkbox"
               class="relative h-6 w-6 cursor-pointer appearance-none overflow-hidden rounded-md border border-blue-300 bg-white transition-colors before:absolute before:inset-0 checked:border-blue-600 checked:bg-blue-600 checked:before:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 disabled:cursor-not-allowed"
-              [checked]="todo?.completed"
+              [checked]="todo?.isCompleted"
               (change)="toggleTodoStatus(todo.id)"
             />
             <span
@@ -94,13 +96,13 @@
           <div class="flex-grow">
             <h2
               class="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-200"
-              [class.line-through]="todo?.completed"
+              [class.line-through]="todo?.isCompleted"
             >
               {{ todo?.title || "Default Checkbox" }}
             </h2>
             <p
               class="text-gray-500 mt-2"
-              [class.line-through]="todo?.completed"
+              [class.line-through]="todo?.isCompleted"
             >
               {{
                 todo?.description ||

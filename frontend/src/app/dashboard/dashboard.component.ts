@@ -1,5 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { InputComponent } from "../components/core/input/input.component";
+import { AuthService } from "../auth.service";
+import { Router } from "@angular/router";
+import { TodosService } from "../todos.service";
+import { Todo } from "../entities/todo.entity";
 
 @Component({
   selector: "app-dashboard",
@@ -7,16 +11,29 @@ import { InputComponent } from "../components/core/input/input.component";
   templateUrl: "./dashboard.component.html",
   styleUrl: "./dashboard.component.css",
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  constructor(
+    private authService: AuthService,
+    private todosService: TodosService,
+    private router: Router,
+  ) {}
+
+  currentUser: any;
+
   onSearchChange = (value: string) => {
     console.log("Search value:", value);
   };
 
   toggleTodoStatus = (id: number) => {
     this.todos = this.todos.map((todo) =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo,
     );
   };
+
+  async getTodos() {
+    const todos = await this.todosService.getTodos(this.currentUser.id);
+    this.todos = todos;
+  }
 
   editTodo = (id: number) => {
     console.log("Edit todo with id:", id);
@@ -26,24 +43,19 @@ export class DashboardComponent {
     this.todos = this.todos.filter((todo) => todo.id !== id);
   };
 
-  todos = [
-    {
-      id: 1,
-      title: "Task 1",
-      completed: false,
-      description: "Description for Task 1",
-    },
-    {
-      id: 2,
-      title: "Task 2",
-      completed: true,
-      description: "Description for Task 2",
-    },
-    {
-      id: 3,
-      title: "Task 3",
-      completed: false,
-      description: "Description for Task 3",
-    },
-  ];
+  todos: Todo[] = [];
+
+  async ngOnInit(): Promise<void> {
+    const currentUser = await this.authService.getCurrentUser();
+
+    if (!currentUser) {
+      console.log("User not authenticated, redirecting to login");
+      this.router.navigate(["/login"]);
+    }
+
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    this.currentUser = currentUser;
+
+    await this.getTodos();
+  }
 }

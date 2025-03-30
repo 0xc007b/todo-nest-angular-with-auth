@@ -20,9 +20,18 @@
           Please enter your credentials to access your account.
         </p>
 
-        <form class="grid grid-cols-1 gap-3">
+        @if (errorMessage) {
+          <div
+            class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
+          >
+            {{ errorMessage }}
+          </div>
+        }
+
+        <form class="grid grid-cols-1 gap-3" (submit)="login($event)">
           <div>
             <app-input
+              autocomplete="username"
               type="text"
               id="username"
               name="username"
@@ -30,6 +39,10 @@
               label="Username or Email"
               placeholder="Enter your username or email"
               [isFullWidth]="true"
+              (valueChange)="
+                authData.emailOrUsername = $event;
+                errorMessage && (errorMessage = null)
+              "
             />
           </div>
           <div>
@@ -41,11 +54,20 @@
               label="Password"
               placeholder="Enter your password"
               [isFullWidth]="true"
+              (valueChange)="
+                authData.password = $event;
+                errorMessage && (errorMessage = null)
+              "
             />
           </div>
 
           <div class="mt-4">
-            <app-button class="mt-4" type="submit" [isFullWidth]="true">
+            <app-button
+              class="mt-4"
+              [isFullWidth]="true"
+              [isLoading]="isLoading"
+              type="submit"
+            >
               Login
             </app-button>
 

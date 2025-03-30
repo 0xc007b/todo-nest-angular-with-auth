@@ -6,37 +6,53 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { TokenUserDto } from 'src/auth/dto/token-user.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.usersService.createUser(createUserDto);
   }
 
   @Get()
-  findAll() {
-    return this.usersService.getUsers();
+  async findAll() {
+    return await this.usersService.getUsers();
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('me')
+  async findMe(@Request() req: { user: TokenUserDto }) {
+    const user = req.user;
+    const userDto: User = await this.usersService.getUserById({ id: user.sub });
+    delete userDto.passwordHash;
+    return userDto;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.getUserById({ id });
+  async findOne(@Param('id') id: string) {
+    const user: User = await this.usersService.getUserById({ id });
+    delete user.passwordHash;
+    return user;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateUser(id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.usersService.updateUser(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.deleteUser(id);
+  async remove(@Param('id') id: string) {
+    return await this.usersService.deleteUser(id);
   }
 }
