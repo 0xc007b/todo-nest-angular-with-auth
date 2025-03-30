@@ -16,31 +16,55 @@
 
     <!-- todo list -->
     <div class="w-full max-w-6xl px-4 flex flex-col gap-4">
-      <app-input
-        type="text"
-        id="title"
-        name="title"
-        [required]="true"
-        label="Title"
-        placeholder="Enter your title of the task"
-        [isFullWidth]="true"
-      />
+      @if (errorMessage) {
+        <div
+          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
+        >
+          {{ errorMessage }}
+        </div>
+      }
 
-      <div
-        class="flex w-full flex-col gap-1 text-on-surface dark:text-on-surface-dark"
-      >
-        <label for="textArea" class="w-fit pl-0.5 text-sm">Description</label>
-        <textarea
-          id="textArea"
-          class="w-full rounded-radius border border-outline bg-surface-alt px-2.5 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-75 dark:border-outline-dark dark:bg-surface-dark-alt/50 dark:focus-visible:outline-primary-dark"
-          rows="3"
-          placeholder="Enter your description of the task"
-        ></textarea>
+      <form class="grid grid-cols-1 gap-3" (submit)="createTodo($event)">
+        <div>
+          <app-input
+            type="text"
+            id="title"
+            name="title"
+            [required]="true"
+            label="Title"
+            placeholder="Enter your title of the task"
+            [isFullWidth]="true"
+            (valueChange)="
+              todoData.title = $event; errorMessage && (errorMessage = null)
+            "
+          />
+        </div>
 
-        <app-button class="mt-8" type="submit" [isFullWidth]="true">
-          Create a new task
-        </app-button>
-      </div>
+        <div
+          class="flex w-full flex-col gap-1 text-on-surface dark:text-on-surface-dark"
+        >
+          <label for="textArea" class="w-fit pl-0.5 text-sm">Description</label>
+          <textarea
+            id="textArea"
+            class="w-full rounded-radius border border-outline bg-surface-alt px-2.5 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-75 dark:border-outline-dark dark:bg-surface-dark-alt/50 dark:focus-visible:outline-primary-dark"
+            rows="3"
+            placeholder="Enter your description of the task"
+            id="description"
+            name="description"
+            [(ngModel)]="todoData.description"
+            (input)="errorMessage && (errorMessage = null)"
+          ></textarea>
+
+          <app-button
+            class="mt-8"
+            [isLoading]="isLoading"
+            type="submit"
+            [isFullWidth]="true"
+          >
+            Create a new task
+          </app-button>
+        </div>
+      </form>
     </div>
   </section>
 </main>

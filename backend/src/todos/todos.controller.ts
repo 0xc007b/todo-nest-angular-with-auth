@@ -23,13 +23,18 @@ export class TodosController {
   constructor(private readonly todosService: TodosService) {}
 
   @Post()
-  create(@Body() createTodoDto: CreateTodoDto, @Request() user: TokenUserDto) {
+  create(
+    @Body() createTodoDto: CreateTodoDto,
+    @Request() req: Request & { user: TokenUserDto },
+  ) {
+    const user = req.user;
     return this.todosService.createTodo(createTodoDto, user);
   }
 
   @Get()
-  findAll() {
-    return this.todosService.getTodos();
+  findAll(@Request() req: Request & { user: TokenUserDto }) {
+    const user = req.user;
+    return this.todosService.getTodos(user);
   }
 
   @Get(':id')
