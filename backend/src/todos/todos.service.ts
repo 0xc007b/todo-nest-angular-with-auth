@@ -62,7 +62,6 @@ export class TodosService {
   }
 
   async getTodos(user: TokenUserDto): Promise<Todo[]> {
-    console.log(user);
     const todos: PrismaTodo[] = await this.prisma.todo.findMany({
       where: { userId: user.sub },
     });

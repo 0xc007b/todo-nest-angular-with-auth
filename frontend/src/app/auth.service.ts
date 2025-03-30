@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   async logout(): Promise<void> {
-    // TODO: Implement logout logic
+    localStorage.removeItem("access_token");
   }
 
   async register(userData: any): Promise<void> {
