@@ -1,3 +1,5 @@
+# 🚧 Work In Progress 🚧
+
 # TodoNest - Full Stack Task Management Application
 
 TodoNest is a comprehensive task management application built with Angular and NestJS. It provides a secure, intuitive platform for users to manage their daily tasks with authentication to keep data private.
