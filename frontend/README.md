@@ -1,59 +1,169 @@
-# Frontend
+# TodoNest - Task Management Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.5.
+TodoNest is a full-stack task management application built with Angular and NestJS. It allows users to create, manage, and track their daily tasks with an authentication system to keep user data private and secure.
 
-## Development server
 
-To start a local development server, run:
+## Features
 
-```bash
-ng serve
+- **User Authentication**
+  - Registration with email and username
+  - Secure login system
+  - JWT-based authentication
+  
+- **Task Management**
+  - Create new tasks with title and description
+  - View all user tasks
+  - Mark tasks as completed
+  - Edit existing tasks
+  - Delete tasks
+  - Search functionality
+  
+- **Responsive Design**
+  - Works on desktop and mobile devices
+  - Clean and intuitive UI
+
+## Technologies Used
+
+### Frontend
+- Angular 19
+- TailwindCSS for styling
+- Custom component library including:
+  - Button component
+  - Input component
+  - Navbar component
+
+### Backend
+- NestJS
+- PostgreSQL database
+- JWT for authentication
+
+## Project Structure
+
+```
+frontend/
+├── src/
+│   ├── app/
+│   │   ├── components/        # Reusable components
+│   │   │   ├── core/          # Core UI components
+│   │   │   └── navbar/        # Navigation
+│   │   ├── dashboard/         # Dashboard feature module
+│   │   │   └── new-todo/      # Create new task feature
+│   │   ├── entities/          # Data models
+│   │   ├── login/             # Login feature
+│   │   ├── register/          # Registration feature
+│   │   ├── app.component.*    # Root component
+│   │   ├── app.routes.ts      # Application routes
+│   │   ├── auth.service.ts    # Authentication service
+│   │   └── todos.service.ts   # Tasks service
+│   ├── environments/          # Environment configurations
+│   └── styles.css             # Global styles
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Getting Started
 
-## Code scaffolding
+### Prerequisites
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Node.js (v14 or later)
+- npm or yarn
+- Angular CLI
 
-```bash
-ng generate component component-name
-```
+### Installation
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/todo-nest-angular-with-auth.git
+   cd todo-nest-angular-with-auth
+   ```
 
-```bash
-ng generate --help
-```
+2. Install dependencies for the frontend:
+   ```bash
+   cd frontend
+   npm install
+   ```
 
-## Building
+3. Install dependencies for the backend:
+   ```bash
+   cd ../backend
+   npm install
+   ```
 
-To build the project run:
+4. Configure the database connection in the backend.
 
-```bash
-ng build
-```
+### Running the Application
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+1. Start the backend server:
+   ```bash
+   cd backend
+   npm run start:dev
+   ```
 
-## Running unit tests
+2. Start the frontend development server:
+   ```bash
+   cd frontend
+   ng serve
+   ```
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+3. Open your browser and navigate to `http://localhost:4200`
 
-```bash
-ng test
-```
+## Core Components
 
-## Running end-to-end tests
+### Button Component
 
-For end-to-end (e2e) testing, run:
+A versatile button component with various styles, states, and options:
 
-```bash
-ng e2e
-```
+- Multiple variants (primary, secondary, danger, etc.)
+- Different appearances (solid, outline, ghost)
+- Loading state
+- Icon support
+- Size options
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Input Component
 
-## Additional Resources
+A flexible input component for form controls:
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Different types (text, password, search, etc.)
+- Success and error states
+- Label support
+- Password visibility toggle
+- Mask support for formatted inputs
+
+## Authentication Flow
+
+1. User registers with email, username, and password
+2. Upon login, the server returns a JWT token
+3. Token is stored in localStorage
+4. All API requests include the token in Authorization header
+5. Protected routes verify the user is authenticated
+
+## Environment Configuration
+
+The application uses environment-specific configuration for API URLs:
+
+- Development: `http://localhost:3000`
+- Production: Configured for your production API
+
+## Deployment
+
+For production deployment:
+
+1. Build the frontend:
+   ```bash
+   cd frontend
+   ng build --configuration production
+   ```
+
+2. Build the backend:
+   ```bash
+   cd backend
+   npm run build
+   ```
+
+3. Deploy the built applications to your hosting provider of choice.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

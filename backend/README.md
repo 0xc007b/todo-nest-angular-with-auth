@@ -1,98 +1,139 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Todo List with Authentication - NestJS API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a backend API for a Todo List application with authentication, built using NestJS, Prisma ORM, and JWT for authentication.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- User authentication (register, login, logout)
+- JWT-based authentication
+- RESTful API for todos management
+- User management
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Project Structure
 
-## Project setup
+The project follows a modular structure with the following main components:
 
-```bash
-$ npm install
+- **Auth Module**: Handles user authentication and authorization
+- **Users Module**: Manages user data and operations
+- **Todos Module**: Manages todos for authenticated users
+- **Prisma Service**: Database connectivity layer
+
+## API Endpoints
+
+### Authentication
+
+- `POST /auth/register`: Register a new user
+- `POST /auth/login`: Login with existing credentials
+- `POST /auth/logout`: Logout current user
+
+### Users
+
+- `GET /users`: Get all users
+- `GET /users/me`: Get current authenticated user
+- `GET /users/:id`: Get user by ID
+- `PATCH /users/:id`: Update user
+- `DELETE /users/:id`: Delete user
+
+### Todos
+
+- `GET /todos`: Get all todos for the authenticated user
+- `GET /todos/:id`: Get a specific todo
+- `POST /todos`: Create a new todo
+- `PATCH /todos/:id`: Update a todo
+- `DELETE /todos/:id`: Delete a todo
+
+## Authentication Flow
+
+The API uses JWT (JSON Web Tokens) for authentication:
+
+1. User registers or logs in
+2. Server issues a JWT token
+3. Client includes this token in subsequent requests via Bearer Authentication
+4. AuthGuard validates the token for protected routes
+
+## Data Models
+
+### User
+
+```typescript
+{
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  passwordHash: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 ```
 
-## Compile and run the project
+### Todo
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```typescript
+{
+  id: string;
+  userId: string;
+  title: string;
+  description?: string | null;
+  isCompleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
 ```
 
-## Run tests
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or later)
+- npm or yarn
+- PostgreSQL or other database supported by Prisma
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up environment variables:
+   Create a `.env` file with the following variables:
+   ```
+   DATABASE_URL="postgresql://username:password@localhost:5432/mydatabase"
+   JWT_SECRET="your-jwt-secret"
+   ```
+4. Run Prisma migrations:
+   ```bash
+   npx prisma migrate dev
+   ```
+5. Start the server:
+   ```bash
+   npm run start:dev
+   ```
+
+## Development
+
+### Running Tests
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm test
 ```
 
-## Deployment
+### API Documentation
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+The API uses Swagger for documentation. After starting the server, visit `/api-docs` to see the interactive API documentation.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Security
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+- Passwords are hashed using bcrypt
+- JWT tokens for secure authentication
+- Guards for route protection
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Dependencies
 
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- NestJS - Progressive Node.js framework
+- Prisma - Next-generation ORM
+- Passport - Authentication middleware
+- JWT - JSON Web Tokens for authentication
+- bcrypt - Password hashing
