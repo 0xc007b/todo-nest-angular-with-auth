@@ -1,1 +1,80 @@
-<p>new-todo works!</p>
+<main>
+  <header
+    class="bg-blue-900 text-white px-6 py-4 shadow-lg flex items-center justify-between sticky top-0 z-50"
+  >
+    <div class="flex items-center space-x-3">
+      <h1 class="text-2xl font-bold tracking-tight">TodoNest</h1>
+    </div>
+
+    <nav class="hidden md:block">
+      <ul class="flex space-x-6">
+        <li>
+          <a href="#" class="hover:text-blue-200 transition-colors font-medium"
+            >Home</a
+          >
+        </li>
+        <li>
+          <a
+            href="/dashboard/new-todo"
+            class="hover:text-blue-200 transition-colors font-medium"
+            >New Task</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div
+      class="flex items-center space-x-3 bg-blue-800 bg-opacity-50 px-4 py-2 rounded-full"
+    >
+      <img
+        src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_5.png"
+        alt="User"
+        class="h-8 w-8 rounded-full border-2 border-white"
+      />
+      <span class="font-medium">John Doe</span>
+    </div>
+  </header>
+  <section
+    class="flex flex-col items-center justify-center h-full pt-8 gap-y-8"
+  >
+    <div
+      class="flex flex-col md:flex-row justify-between gap-6 w-full max-w-6xl px-4"
+    >
+      <div class="flex flex-col items-center md:items-start">
+        <h2 class="text-3xl font-bold tracking-tight text-blue-700">
+          Create a New Task
+        </h2>
+        <p class="text-gray-500 mt-2">Add a new task to your list.</p>
+      </div>
+    </div>
+
+    <!-- todo list -->
+    <div class="w-full max-w-6xl px-4 flex flex-col gap-4">
+      <app-input
+        type="text"
+        id="title"
+        name="title"
+        [required]="true"
+        label="Title"
+        placeholder="Enter your title of the task"
+        [isFullWidth]="true"
+      />
+
+      <div
+        class="flex w-full flex-col gap-1 text-on-surface dark:text-on-surface-dark"
+      >
+        <label for="textArea" class="w-fit pl-0.5 text-sm">Description</label>
+        <textarea
+          id="textArea"
+          class="w-full rounded-radius border border-outline bg-surface-alt px-2.5 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-75 dark:border-outline-dark dark:bg-surface-dark-alt/50 dark:focus-visible:outline-primary-dark"
+          rows="3"
+          placeholder="Enter your description of the task"
+        ></textarea>
+
+        <app-button class="mt-8" type="submit" [isFullWidth]="true">
+          Create a new task
+        </app-button>
+      </div>
+    </div>
+  </section>
+</main>
